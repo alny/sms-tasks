@@ -11,7 +11,8 @@ const getRequest = (path, params, actionType) => {
 
         dispatch({
           type: actionType,
-          payload: payload
+          payload: payload,
+          params: params
         })
 
       })
@@ -52,7 +53,6 @@ export default {
 
     },
 
-
     tasksRecieved: (tasks) => {
       return {
         type: constants.TASKS_RECIEVED,
@@ -64,15 +64,13 @@ export default {
       return (dispatch) => {
         return dispatch(postRequest('/api/task', params, constants.TASK_CREATED ))
       }
+    },
+
+    selectCategory: (category) => {
+      return {
+        type: constants.CATEGORY_SELECTED,
+        payload: category
+      }
     }
-
-    // taskCreated: (task) => {
-    //   return {
-    //     type: constants.TASK_CREATED,
-    //     payload: task
-    //   }
-    // }
-
-
 
 }

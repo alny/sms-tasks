@@ -21654,20 +21654,30 @@
 	  function Tasks() {
 	    _classCallCheck(this, Tasks);
 	
-	    var _this = _possibleConstructorReturn(this, (Tasks.__proto__ || Object.getPrototypeOf(Tasks)).call(this));
-	
-	    _this.state = {};
-	    return _this;
+	    return _possibleConstructorReturn(this, (Tasks.__proto__ || Object.getPrototypeOf(Tasks)).call(this));
+	    //this.getTasks = this.getTasks.bind(this)
 	  }
 	
 	  _createClass(Tasks, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      this.props.fetchTasks(null).then(function (results) {
+	    key: 'getTasks',
+	    value: function getTasks() {
+	      if (this.props.tasks[this.props.tasks.selectedCategory] != null) return;
+	
+	      this.props.fetchTasks({ category: this.props.tasks.selectedCategory }).then(function (results) {
 	        // console.log(JSON.stringify(results))
 	      }).catch(function (err) {
 	        alert('Oh Boy');
 	      });
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.getTasks();
+	    }
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate() {
+	      this.getTasks();
 	    }
 	  }, {
 	    key: 'createTask',
@@ -21688,7 +21698,7 @@
 	        _react2.default.createElement(
 	          'ol',
 	          null,
-	          this.props.tasks.all == null ? null : this.props.tasks.all.map(function (task, i) {
+	          this.props.tasks[this.props.tasks.selectedCategory] == null ? null : this.props.tasks[this.props.tasks.selectedCategory].map(function (task, i) {
 	            return _react2.default.createElement(
 	              'li',
 	              { key: task.id },
@@ -21723,6 +21733,9 @@
 	    },
 	    fetchTasks: function fetchTasks(task) {
 	      return dispatch(_actions2.default.fetchTasks(task));
+	    },
+	    selectCategory: function selectCategory(category) {
+	      return dispatch(_actions2.default.selectCategory(category));
 	    }
 	
 	  };
@@ -29649,6 +29662,11 @@
 	          { className: 'form-control', id: 'category', onChange: this.updateTask.bind(this) },
 	          _react2.default.createElement(
 	            'option',
+	            null,
+	            'Select A Category'
+	          ),
+	          _react2.default.createElement(
+	            'option',
 	            { value: 'delivery' },
 	            'Delivery'
 	          ),
@@ -29659,7 +29677,7 @@
 	          ),
 	          _react2.default.createElement(
 	            'option',
-	            { value: 'house cleaning<' },
+	            { value: 'house cleaning' },
 	            'House Cleaning'
 	          )
 	        ),
@@ -29705,7 +29723,8 @@
 	
 	      dispatch({
 	        type: actionType,
-	        payload: payload
+	        payload: payload,
+	        params: params
 	      });
 	    }).catch(function (err) {
 	      console.log('ERRROR: ' + JSON.stringify(err));
@@ -29749,15 +29768,14 @@
 	    return function (dispatch) {
 	      return dispatch(postRequest('/api/task', params, _constants2.default.TASK_CREATED));
 	    };
+	  },
+	
+	  selectCategory: function selectCategory(category) {
+	    return {
+	      type: _constants2.default.CATEGORY_SELECTED,
+	      payload: category
+	    };
 	  }
-	
-	  // taskCreated: (task) => {
-	  //   return {
-	  //     type: constants.TASK_CREATED,
-	  //     payload: task
-	  //   }
-	  // }
-	
 	
 	};
 
@@ -29773,7 +29791,8 @@
 	exports.default = {
 	
 	  TASKS_RECIEVED: 'TASKS_RECIEVED',
-	  TASK_CREATED: 'TASK_CREATED'
+	  TASK_CREATED: 'TASK_CREATED',
+	  CATEGORY_SELECTED: 'CATEGORY_SELECTED'
 	
 	};
 
@@ -32124,16 +32143,29 @@
 	
 	    switch (action.type) {
 	        case _constants2.default.TASKS_RECIEVED:
-	            console.log('TASKS_RECIEVED: ' + JSON.stringify(action.payload));
-	            updated['all'] = action.payload;
+	            //console.log('TASKS_RECIEVED: ' + JSON.stringify(action.payload))
+	
+	            var keys = Object.keys(action.params);
+	            keys.forEach(function (key, i) {
+	                var value = action.params[key];
+	                updated[value] = action.payload;
+	            });
+	
+	            console.log('TASKS_RECIEVED: ' + JSON.stringify(updated));
 	
 	            return updated;
 	
 	        case _constants2.default.TASK_CREATED:
 	            console.log('TASK_CREATED: ' + JSON.stringify(action.payload));
-	            var currentTasks = updated['all'] ? Object.assign([], updated['all']) : [];
+	            var currentTasks = updated[action.payload.category] ? Object.assign([], updated[action.payload.category]) : [];
 	            currentTasks.unshift(action.payload);
-	            updated['all'] = currentTasks;
+	            updated[action.payload.category] = currentTasks;
+	
+	            return updated;
+	
+	        case _constants2.default.CATEGORY_SELECTED:
+	            console.log('CATEGORY_SELECTED ' + JSON.stringify(action.payload));
+	            updated['selectedCategory'] = action.payload;
 	
 	            return updated;
 	
@@ -32186,6 +32218,13 @@
 	  }
 	
 	  _createClass(Categories, [{
+	    key: 'selectCategory',
+	    value: function selectCategory(category, event) {
+	      event.preventDefault();
+	      this.props.selectCategory(category);
+	      //console.log('selectCategory: ' + category)
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this2 = this;
@@ -32208,7 +32247,7 @@
 	              { key: category },
 	              _react2.default.createElement(
 	                'a',
-	                { href: '', style: { color: color } },
+	                { onClick: _this2.selectCategory.bind(_this2, category), href: '', style: { color: color } },
 	                category
 	              )
 	            );
@@ -32227,7 +32266,15 @@
 	  };
 	};
 	
-	exports.default = (0, _reactRedux.connect)(stateToProps)(Categories);
+	var dispatchToProps = function dispatchToProps(dispatch) {
+	  return {
+	    selectCategory: function selectCategory(category) {
+	      return dispatch(_actions2.default.selectCategory(category));
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(stateToProps, dispatchToProps)(Categories);
 
 /***/ }
 /******/ ]);

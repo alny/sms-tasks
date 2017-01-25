@@ -5,6 +5,13 @@ import actions from '../../actions'
 import { connect } from 'react-redux'
 
 class Categories extends Component {
+
+  selectCategory(category, event){
+    event.preventDefault()
+    this.props.selectCategory(category)
+    //console.log('selectCategory: ' + category)
+  }
+
   render(){
     return(
       <div>
@@ -13,7 +20,7 @@ class Categories extends Component {
           {this.props.tasks.categories.map((category, i) => {
             const color = (category == this.props.tasks.selectedCategory) ? 'red' : '#333'
             return <li key={category}>
-                  <a href="" style={{color: color}}>{category}</a>
+                  <a onClick={this.selectCategory.bind(this, category)} href="" style={{color: color}}>{category}</a>
                   </li>
           })
         }
@@ -30,4 +37,10 @@ const stateToProps = (state) => {
   }
 }
 
-export default connect(stateToProps)(Categories)
+const dispatchToProps = (dispatch) => {
+  return {
+      selectCategory: (category) => dispatch(actions.selectCategory(category))
+  }
+}
+
+export default connect(stateToProps, dispatchToProps)(Categories)
