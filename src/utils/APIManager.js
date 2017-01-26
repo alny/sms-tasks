@@ -14,10 +14,10 @@ export default {
             reject(err)
             return
           }
-          // if(response.body.confirmation != 'success'){
-          //   reject({message: response.body.message})
-          //   return
-          // }
+          if(response.body.confirmation != 'success'){
+            reject(new Error(response.body.message))
+            return
+          }
           resolve(response.body)
         })
       })
@@ -36,7 +36,7 @@ export default {
             return
           }
           if(response.body.confirmation != 'success'){
-            reject({message: response.body.message})
+            reject(new Error(response.body.message))
             return
           }
           resolve(response.body)

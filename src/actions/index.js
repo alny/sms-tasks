@@ -7,7 +7,7 @@ const getRequest = (path, params, actionType) => {
       .then(response => {
         //console.log('GET: ' + JSON.stringify(response))
 
-        const payload = response.results || response.result
+        const payload = response.results || response.result || response.user
 
         dispatch({
           type: actionType,
@@ -17,8 +17,8 @@ const getRequest = (path, params, actionType) => {
 
       })
       .catch(err => {
-        console.log('ERRROR: ' + JSON.stringify(err))
-
+        console.log('ERRROR: ' + JSON.stringify(err.message))
+        throw err
       })
 }
 
@@ -28,7 +28,7 @@ const postRequest = (path, params, actionType) => {
       .then(response => {
         //console.log('POST: ' + JSON.stringify(response))
 
-        const payload = response.results || response.result
+        const payload = response.results || response.result || response.user
 
         dispatch({
           type: actionType,
@@ -37,7 +37,8 @@ const postRequest = (path, params, actionType) => {
 
       })
       .catch(err => {
-        console.log('ERRROR: ' + JSON.stringify(err))
+        console.log('ERRROR: ' + JSON.stringify(err.message))
+        throw err
 
       })
 }
@@ -45,6 +46,33 @@ const postRequest = (path, params, actionType) => {
 
 
 export default {
+
+
+    register: (credentials) => {
+      return (dispatch) => {
+        return dispatch(postRequest('/account/register', credentials, constants.PROFILE_CREATED))
+      }
+
+    },
+    login: (credentials) => {
+      return (dispatch) => {
+        return dispatch(postRequest('/account/login', credentials, constants.USER_LOGGED_IN))
+      }
+
+    },
+
+    currentUser: () => {
+      return (dispatch) => {
+        return dispatch(getRequest('/account/currentuser', {}, constants.USER_LOGGED_IN))
+      }
+
+    },
+    logout: () => {
+      return (dispatch) => {
+        return dispatch(getRequest('/account/logout', {}, constants.USER_LOGGED_IN))
+      }
+
+    },
 
     fetchTasks: (params) => {
       return (dispatch) => {
