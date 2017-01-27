@@ -6,8 +6,17 @@ import { connect } from 'react-redux'
 class Account extends Component {
 
   componentDidMount(){
-    if(this.props.user == null)
+    if(this.props.user != null)
+    return
+
     this.props.currentUser()
+      .then(response => {
+
+      })
+      .catch(err => {
+        console.log('ERROR: ' + err.message)
+      })
+
   }
 
 
