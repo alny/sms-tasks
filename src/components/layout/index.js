@@ -1,5 +1,8 @@
 import Home from './Home'
+import Split from './Split'
+
 
 export {
-  Home
+  Home,
+  Split
 }

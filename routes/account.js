@@ -27,11 +27,11 @@ router.get('/:action', function(req, res, next){
     }
       // Verify Token
       jwt.verify(req.session.token, process.env.TOKEN_SECRET, function(err, decoded){
-
       if(err){
+        req.session.reset()
         res.json({
-          confirmation: 'fail',
-          message: 'Access Denied'
+          confirmation: 'success',
+          user: null
         })
         return
       }

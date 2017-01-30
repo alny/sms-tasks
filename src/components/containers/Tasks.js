@@ -35,24 +35,42 @@ class Tasks extends Component {
   }
 
   createTask(task){
-    this.props.createTask(task)
+    let updated = Object.assign({}, task)
+
+    const user = this.props.account.user
+    updated['profile'] = {
+        id: user.id,
+        username: user.username
+    }
+
+    this.props.createTask(updated)
 
   }
 
   render(){
     return(
-      <div>
-        <h2>Tasks List:</h2>
-        <ol>
+
+      <div className="content">
+        <article>
+
+
           {(this.props.tasks[this.props.tasks.selectedCategory] == null) ? null :
           this.props.tasks[this.props.tasks.selectedCategory].map((task, i) => {
             return (
-              <li key={task.id}><Link to={'/task/' + task.id} href="#">Title: {task.title} - Category: {task.category}</Link></li>
+
+              <ul style={{border: '1px solid #ddd'}} className="actions" key={task.id}>
+                <h3><Link to={'/task/' + task.id} href="#">{task.title}</Link></h3>
+                <p><Link to={'/task/' + task.id} href="#">{task.description}</Link></p>
+                  <p><Link to={'/task/' + task.id} href="#">{task.profile.username}</Link></p>
+
+
+
+                </ul>
 
                   )
           })
           }
-      </ol>
+      </article>
         <CreateTask onSubmitTask={this.createTask.bind(this)}/>
       </div>
     )
@@ -61,7 +79,8 @@ class Tasks extends Component {
 
 const stateToProps = (state) => {
   return {
-    tasks: state.task
+    tasks: state.task,
+    account: state.account
   }
 }
 

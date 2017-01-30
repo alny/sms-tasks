@@ -42,9 +42,10 @@ app.use(sessions({
   secret: 'process.env.SESSION_SECRET',
   duration: 24*60*60*1000,
   activeDuration: 30*60*1000
-  
+
 }))
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.use('/', index);
 app.use('/api', api);

@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 class Account extends Component {
 
   componentDidMount(){
+
     if(this.props.user != null)
     return
 
@@ -16,7 +17,6 @@ class Account extends Component {
       .catch(err => {
         console.log('ERROR: ' + err.message)
       })
-
   }
 
 
@@ -54,8 +54,6 @@ class Account extends Component {
           </div>
 
           }
-
-
       </div>
     )
   }
@@ -73,10 +71,6 @@ const dispatchToProps = (dispatch) => {
     login: (credentials) => dispatch(actions.login(credentials)),
     currentUser: () => dispatch(actions.currentUser()),
     logout: () => dispatch(actions.logout())
-
-
-
-
   }
 }
 
