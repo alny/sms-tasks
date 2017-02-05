@@ -15,7 +15,7 @@ const getRequest = (path, params, actionType) => {
           params: params
         })
         return response
-        
+
 
       })
       .catch(err => {
@@ -50,6 +50,12 @@ const postRequest = (path, params, actionType) => {
 
 
 export default {
+
+    fetchProfile: (id) => {
+      return (dispatch) => {
+        return dispatch(getRequest('/api/profile/' + id, null, constants.PROFILES_RECEIVED))
+      }
+    },
 
 
     register: (credentials) => {
@@ -109,6 +115,12 @@ export default {
       return {
         type: constants.CATEGORY_SELECTED,
         payload: category
+      }
+    },
+
+    fetchMessages: (params) => {
+      return (dispatch) => {
+        return dispatch(getRequest('/api/message', params, constants.MESSAGE_RECIEVED))
       }
     }
 

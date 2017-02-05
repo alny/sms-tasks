@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { Home, Split } from './components/layout/'
+import { Profile } from './components/containers'
 import { Provider } from 'react-redux'
 import store from './stores'
 import { Router, Route, IndexRoute, browserHistory } from 'react-router'
@@ -12,6 +13,8 @@ const app =  (
 
         <Route path="/" component={Home}/>
         <Route path="/task/:id" component={Split}/>
+        <Route path="/profile/:id" component={Profile}/>
+
 
 
       </Router>

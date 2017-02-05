@@ -18,7 +18,6 @@ class Tasks extends Component {
 
     this.props.fetchTasks({category: this.props.tasks.selectedCategory})
     .then(results => {
-      // console.log(JSON.stringify(results))
     })
     .catch(err => {
       alert('Oh Boy')
@@ -61,7 +60,7 @@ class Tasks extends Component {
               <ul style={{border: '1px solid #ddd'}} className="actions" key={task.id}>
                 <h3><Link to={'/task/' + task.id} href="#">{task.title}</Link></h3>
                 <p><Link to={'/task/' + task.id} href="#">{task.description}</Link></p>
-                  <p><Link to={'/task/' + task.id} href="#">{task.profile.username}</Link></p>
+                  <p><Link to={'/profile/' + task.profile.id} href="#">{task.profile.username}</Link></p>
 
 
 

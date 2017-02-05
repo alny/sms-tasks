@@ -9,6 +9,8 @@ gulp.task('css', function(){
   return gulp.src(
     [
       './public/assets/css/main.css',
+      './public/assets/css/toastr.min.css'
+
 
     ]
   )
@@ -24,7 +26,9 @@ gulp.task('build', function(){
       './public/assets/js/jquery.min.js',
       './public/assets/js/skel.min.js',
       './public/assets/js/util.js',
-      './public/assets/js/main.js'
+      './public/assets/js/main.js',
+      './public/assets/js/toastr.min.js'
+
 
     ]
   )

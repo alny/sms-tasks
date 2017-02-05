@@ -25,13 +25,25 @@ class Auth extends Component {
   }
 
   createSignUp(event){
+    if(this.state.credentials.username.length == 0){
+      toastr.warning('Enter a Username to Login Please!')
+      return
+    }
     event.preventDefault()
-    //console.log('createLogin: ' + JSON.stringify(this.state.credentials))
+    toastr.success('Your account are now created and active')
     this.props.onRegister(this.state.credentials)
 
   }
 
   createLogin(event){
+    if(this.state.credentials.email.length == 0){
+      toastr.warning('Enter a Username to Login Please!')
+      return
+    }
+    if(this.state.credentials.password.length == 0){
+      toastr.warning('Enter a Password to Login Please!')
+      return
+    }
     event.preventDefault()
     this.props.onLogin(this.state.credentials)
 

@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { Auth } from '../views'
 import actions from '../../actions'
 import { connect } from 'react-redux'
+import  { Link } from 'react-router'
+
 
 class Account extends Component {
 
@@ -24,6 +26,7 @@ class Account extends Component {
     console.log('Login: ' + JSON.stringify(credentials))
     this.props.login(credentials)
     .then(response => {
+      toastr.success('Successfully Logged In')
 
     })
     .catch(err => {
@@ -49,7 +52,7 @@ class Account extends Component {
         <h2>Account</h2>
           {(this.props.user == null) ? <Auth onLogin={this.login.bind(this)} onRegister={this.register.bind(this)}/> :
           <div>
-            <h2>Welcome {this.props.user.username}</h2><br/>
+            <h2>Welcome <Link to={'/profile/' + this.props.user.id}>{this.props.user.username}</Link></h2><br/>
             <button onClick={this.logout.bind(this)} className="btn btn-warning">Log Out</button>
           </div>
 
